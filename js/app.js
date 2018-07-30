@@ -1,48 +1,48 @@
-  function handleDragEnter() {
-      console.log('hovering');
-      this.classList.add('hovering');
-  }
-
-  function handleDragEnd() {
-    console.log('leave');
-    this.classList.add('drag-end');
+const handleDragEnter = (e) => {
+    console.log('hovering');
+    e.target.classList.add('hovering');
 }
 
-  function handleDrop(e) {
-      var data = e.dataTransfer.getData("text/plain");
-      var itemToTransfer = document.getElementById(data);
-      itemToTransfer.style.opacity = '1';
-      console.log(e.currentTarget);
-      e.currentTarget.appendChild(itemToTransfer); // currentTarget tiene el elemento
-    //   if (e.target.tagName !== 'IMG') {
-    //     e.currentTarget.appendChild(itemToTransfer);
-    //   }  
-  }
+const handleDrop = (e) => {
+    let data = e.dataTransfer.getData("text/plain");
+    let itemToTransfer = document.getElementById(data);
 
-  function handleDragOver (e) {
-    if(e.preventDefault) e.preventDefault();
-			return false;
-  }
+    let newImage = document.createElement('img');
+    newImage.classList.add('dragable');
+    newImage.src = itemToTransfer.src;
+    console.log(newImage);
+    if (e.currentTarget.childNodes.length == 1) { // currentTarget gives us the parent of the element that triggers the event
+        e.currentTarget.removeChild(e.currentTarget.childNodes[0]);
+        e.currentTarget.appendChild(newImage);
+    } else {
+        e.currentTarget.appendChild(newImage); 
+    }
 
-  function handleDragStart(e) {
-    this.style.opacity = '0.4';
+    e.target.classList.add('drag-end');
+}
+
+const handleDragOver = (e) => {
+    if (e.preventDefault) e.preventDefault();
+    return false;
+}
+
+const handleDragStart = (e) => {
+    e.target.style.opacity = '0.4';
 
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', e.target.id);
-  }
-  
-  var cols = document.querySelectorAll('.img-fluid');
+}
 
-  [].forEach.call(cols, function(col) {    
+let cols = document.querySelectorAll('.img-fluid');
+
+[].forEach.call(cols, function (col) {
     col.addEventListener('dragstart', handleDragStart, false);
+});
 
-  });
+let colsDropZone = document.querySelectorAll('.cols-drop');
 
-  var colsDropZone = document.querySelectorAll('.cols-drop');
-
-  [].forEach.call(colsDropZone, function(col) {    
+[].forEach.call(colsDropZone, function (col) {
     col.addEventListener('dragenter', handleDragEnter, false);
     col.addEventListener('drop', handleDrop, false);
     col.addEventListener('dragover', handleDragOver, false);
-    col.addEventListener('dragend', handleDragEnd, false);
-  });
+});
