@@ -12,9 +12,11 @@
       var data = e.dataTransfer.getData("text/plain");
       var itemToTransfer = document.getElementById(data);
       itemToTransfer.style.opacity = '1';
-      if (e.target.tagName !== 'IMG') {
-        e.target.appendChild(itemToTransfer);
-      }  
+      console.log(e.currentTarget);
+      e.currentTarget.appendChild(itemToTransfer); // currentTarget tiene el elemento
+    //   if (e.target.tagName !== 'IMG') {
+    //     e.currentTarget.appendChild(itemToTransfer);
+    //   }  
   }
 
   function handleDragOver (e) {
